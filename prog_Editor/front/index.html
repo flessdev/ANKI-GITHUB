@@ -1,4 +1,17 @@
-<!--ANKI-->
+<script>
+  if (typeof good_code == 'undefined') {
+    good_code = 'good_code'
+    bad_code = 'bad_code'
+    enabledLanguages = "html js"
+    instructions = 'Follow to flessdev'
+  } else {
+    //Anki
+    const baseElement = document.createElement("base");
+    baseElement.setAttribute("href", "https://appassets.androidplatform.net/anki_Github/prog_Editor/front/");
+    baseElement.setAttribute("target", "_self");
+    document.head.append(baseElement);
+  }
+</script>
 
 
 <div class="xcontainer">
@@ -22,7 +35,7 @@
   <button class="mostrar">Flip</button>
 </div>
 
-<base href="https://appassets.androidplatform.net/anki_Github/prog_Editor/front/">
+
 <link rel="stylesheet" href="./styles.css">
 <script src="_jquery.min.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ace.min.js'></script>
@@ -30,15 +43,6 @@
 <script src="_utils.js"></script>
 <script src="_keyboardFocus.js"></script>
 <!--script src="https://www.unpkg.com/ace-linters@latest/build/ace-linters.js"></script-->
-
-<script>
-  if (typeof good_code == 'undefined') {
-    good_code = 'good_code' //$('#good_code').get(0).content.children[0].value;
-    bad_code = 'bad_code' //$('#bad_code').get(0).content.children[0].value;
-    enabledLanguages = "html js"
-    instructions = 'Follow to flessdev'
-  }
-</script>
 
 
 <script src="script.js"></script>
