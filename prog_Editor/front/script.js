@@ -10,7 +10,6 @@ enabledLanguages = enabledLanguages
 ? sortByLength(good_code): ["html",
   "css",
   "js"];
-console.log(typeof badCodeObj)
 
 
 $(".instructions").text(instructions)
