@@ -209,12 +209,22 @@ function limpiarLocalStorage(claveUltimaLimpieza, tiempoLimpiezaEnDias) {
     // Realizamos la limpieza de datos
     for (let i = 0; i < localStorage.length; i++) {
       const clave = localStorage.key(i);
-      const datos = JSON.parse(localStorage.getItem(clave));
-
-      if (datos && datos.fechaAgregado && (now - datos.fechaAgregado) >= tiempoLimpiezaEnMilisegundos) {
+      let datos;
+      try{
+        datos = JSON.parse(localStorage.getItem(clave));
+      }
+      catch(error){
+        console.log(`Hubo un error al acceder a la clave ${clave}: ${error}`)
+        continue
+      }
+      
+//console.log(datos)
+      if (datos?.now && (now - datos.now) >= tiempoLimpiezaEnMilisegundos) {
+        console.log('remove')
         // Los datos son más antiguos de tiempoLimpiezaEnMilisegundos, así que los eliminamos
         localStorage.removeItem(clave);
       }
+      console.log("dndjdb")
     }
 
     // Guardamos la nueva fecha de la última limpieza
@@ -222,11 +232,3 @@ function limpiarLocalStorage(claveUltimaLimpieza, tiempoLimpiezaEnDias) {
   }
 }
 
-function agregarItemConFecha(key, value) {
-  const now = new Date().getTime(); // Obtenemos la fecha actual en milisegundos
-  const data = {
-    value,
-    date: now
-  };
-  localStorage.setItem(key, JSON.stringify(data));
-}

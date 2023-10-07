@@ -1,9 +1,16 @@
 ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6')
-const hashCode = generateIdentifier(good_code)
-const identifier = hashCode;
+
+const identifier = generateIdentifier(good_code)
 const retrievedData = JSON.parse(localStorage.getItem(identifier));
+
+
+
 console.log(retrievedData)
-const badCodeObj = retrievedData ? JSON.parse(retrievedData.value): separateCode(bad_code);
+let badCodeObj;
+
+if(retrievedData?.code){
+  badCodeObj = retrievedData.code
+}else badCodeObj = separateCode(bad_code);
 
 enabledLanguages = enabledLanguages
 ? enabledLanguages.split(/\s+/): good_code
@@ -43,14 +50,6 @@ $saveBtn.click(_ => {
   c = c ? `<script>\n${c}\n<\/script>`: false;
   copyToClipboard([a, b, c].filter(e => e).join('\n'))
 })
-
-//👇 Funcion de Teke
-
-
-
-
-
-
 
 
 async function getBeatify(editor) {
@@ -109,7 +108,7 @@ class createGroup {
 
 const group1 = new createGroup($('.front .editor').get(0), badCodeObj, $badIframe)
 getBeatify(group1.editor)
-let index = 0;
+let index = retrievedData?.index ? retrievedData.index: 0;
 
 const DIRECTIONS = {
   right: (r, i) => ++i % r,
@@ -176,6 +175,7 @@ document.addEventListener('DOMContentLoaded',
   })
 
 let interval = null;
+const now = new Date().getTime();
 
 function update(language, code) {
   if (interval) clearInterval(interval)
@@ -184,16 +184,23 @@ function update(language, code) {
 
   //updatePreview(page)
   //$iframe.src =  getPreviewUrl()
-
+console.log("update")
   interval = setTimeout(_ => {
     $badIframe.attr('srcdoc', group1.getValues());
-    const data = {
-      html: group1.html?.getValue() ?? "",
-      css: group1.css?.getValue() ?? "",
-      js: group1.js?.getValue() ?? ""
-    }
+    console.log('index')
+      const value = {
+      code: {
+        html: group1.html?.getValue() ?? "",
+        css: group1.css?.getValue() ?? "",
+        js: group1.js?.getValue() ?? ""
+      },
+      now,
+      index
+      }
+      
+    console.log(index)
 
 
-    agregarItemConFecha(identifier, JSON.stringify(data))
+    localStorage.setItem(identifier, JSON.stringify(value))
   }, 500)
 }
