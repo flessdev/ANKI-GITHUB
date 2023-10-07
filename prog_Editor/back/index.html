@@ -1,0 +1,50 @@
+<script>
+  if (typeof good_code == 'undefined') {
+    good_code = 'good_code'
+    bad_code = 'bad_code'
+    enabledLanguages = "html js"
+    instructions = 'Follow to flessdev'
+  } else {
+    //Anki
+    const baseElement = document.createElement("base");
+    baseElement.setAttribute("href", "https://appassets.androidplatform.net/anki_Github/prog_Editor/front/");
+    baseElement.setAttribute("target", "_self");
+    document.head.append(baseElement);
+  }
+</script>
+
+
+<!--START-->
+<link rel="stylesheet" href="styles.css">
+<div class="xcontainer">
+  <div class="back side">
+    <iframe class="you"></iframe>
+    <iframe class="good"></iframe>
+  </div>
+  <div class="front side active">
+    <div class='editor-container'>
+      <div class='you editor'></div>
+    </div>
+    <div class='editor-container'>
+      <div class='good editor'></div>
+    </div>
+  </div>
+  <div class="banner">
+    <div class="instructions"></div>
+    <button class='save'>Save</button>
+    <button class='pretty'>{ }</button>
+    <button class="update">Update</button>
+    <button class="mostrar">Flip</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.28.0/src-min-noconflict/ace.min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/ace-builds@1.28.0/src-min-noconflict/ext-language_tools.js'></script>
+
+<!--script src='https://www.unpkg.com/ce-linters@latest/build/ace-linters.js'></script-->
+
+<!--script src="_ace-linters.js"></script-->
+<script src="_jquery.min.js"></script>
+<script src="_utils.js"></script>
+<script src="_keyboardFocus.js"></script>
+<script src="script.js"></script>

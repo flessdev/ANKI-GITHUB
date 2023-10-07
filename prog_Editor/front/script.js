@@ -1,16 +1,18 @@
 ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6')
 
 const identifier = generateIdentifier(good_code)
-const retrievedData = JSON.parse(localStorage.getItem(identifier));
 
+let retrievedData;
+try{
+  retrievedData = JSON.parse(localStorage.getItem(identifier));
+}catch(e){
+  console.error(`retrievedData no es objeto: ${e}`)
+}
+const badCodeObj = retrievedData?.code
+  ? retrievedData.code
+  : separateCode(bad_code)
 
-
-console.log(retrievedData)
-let badCodeObj;
-
-if(retrievedData?.code){
-  badCodeObj = retrievedData.code
-}else badCodeObj = separateCode(bad_code);
+let index = retrievedData?.index ? retrievedData.index: 0;
 
 enabledLanguages = enabledLanguages
 ? enabledLanguages.split(/\s+/): good_code
@@ -108,7 +110,7 @@ class createGroup {
 
 const group1 = new createGroup($('.front .editor').get(0), badCodeObj, $badIframe)
 getBeatify(group1.editor)
-let index = retrievedData?.index ? retrievedData.index: 0;
+
 
 const DIRECTIONS = {
   right: (r, i) => ++i % r,

@@ -1,0 +1,173 @@
+  @font-face {
+    font-family: Victor;
+    src: url(_VictorMono-Regular.ttf);
+  }
+  main.container {
+    padding: 0
+  }
+  body {
+    margin: 0;
+  }
+  .xcontainer {
+    height: 100vh;
+    width: 100vw;
+    padding: 0;
+  }
+  .front, .back {
+    position: absolute;
+    width: 100%;
+    height: inherit;
+    display: grid;
+    grid-template-rows: 60% 40%;
+    /*background: black*/
+  }
+
+  .side {
+    display: none;
+  }
+  .side.active {
+    display: grid;
+  }
+
+
+  iframe {
+    background: #778;
+    border: none;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+  }
+  .editorAndBanner {
+    position: relative;
+  }
+  .banner {
+    z-index: 50;
+    position: absolute;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr auto auto auto auto;
+    grid-template-rows: 1fr;
+    width: auto;
+    right: 0;
+    bottom: 40%;
+    color: white;
+  }
+  .banner > * {
+    color: white;
+    padding: 4px 2px;
+    box-sizing: border-box;
+    background: #333A;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+  }
+  .instructions {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+  button {
+    min-width: 1.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+  }
+  button:active {
+    background: #666
+  }
+  .hidden {
+    display: none;
+  }
+  .zindex {
+    z-index: 10;
+  }
+  .ace_mobile-menu {
+    display: none
+  }
+  .compress {
+    width: 20px;
+    font-size: 0;
+  }
+  b {
+    color: orange
+  }
+  .editor-files {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+  .ace_scroller, .ace_gutter {
+    background-color: black !important;
+  }
+  .ace_scroller::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0.5;
+    content: "";
+    background-size: 10%;
+    background-repeat: no-repeat;
+    background-position: 95% 10px;
+  }
+  [language='html'] .ace_scroller::before {
+    background-image: url('img/_html.svg');
+  }
+  [language='css'] .ace_scroller::before {
+    background-image: url('img/_css.svg');
+  }
+
+  [language='js'] .ace_scroller::before {
+    outline: 1px solid red;
+    background-image: url('img/_js.svg');
+  }
+
+  @keyframes fadeOut {
+    0%, 90% {
+      opacity: 0.25;
+    }
+    91%, 100% {
+      opacity: 1;
+    }
+  }
+  /*.ace_scroller::before {
+   animation: fadeOut 5s infinite;
+   }*/
+  .ace_active-line {
+    background-color: rgba(100, 100, 100, 0.2) !important
+  }
+  .editor-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  .editor {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
+  .front .editor.good .ace_scroller,
+  .front .editor.good .ace_gutter
+  /*.textareas :nth-child(2) .ace_content*/ {
+    background-color: #112 !important;
+  }
+
+  #console {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    max-height: 40%;
+    outline: 1px solid #fff;
+    overflow: auto;
+    margin: 0;
+  }
+  .ace_tooltip, .ace_tooltip * {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    font-size: .8em !important;
+  }
