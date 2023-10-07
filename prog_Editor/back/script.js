@@ -1,4 +1,4 @@
-const identifier = generateIdentifier(good_code)
+const identifier = generateIdentifier(bad_code + good_code)
 
   
 let retrievedData;

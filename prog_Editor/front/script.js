@@ -1,6 +1,6 @@
 ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6')
 
-const identifier = generateIdentifier(good_code)
+const identifier = generateIdentifier(bad_code + good_code)
 
 let retrievedData;
 try{
