@@ -7,11 +7,9 @@ try{
 }catch(e){
   console.error(`retrievedData no es objeto: ${e}`)
 }
-const badCodeObj = retrievedData?.code
-  ? retrievedData.code
-  : separateCode(bad_code)
+const badCodeObj = retrievedData?.code ?? separateCode(bad_code)
 
-let index = retrievedData?.index ? retrievedData.index: 0;
+let index = retrievedData?.index ?? 0;
 
     
   const goodCodeObj = separateCode(good_code)

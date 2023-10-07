@@ -8,11 +8,9 @@ try{
 }catch(e){
   console.error(`retrievedData no es objeto: ${e}`)
 }
-const badCodeObj = retrievedData?.code
-  ? retrievedData.code
-  : separateCode(bad_code)
+const badCodeObj = retrievedData?.code ?? separateCode(bad_code)
 
-let index = retrievedData?.index ? retrievedData.index: 0;
+let index = retrievedData?.index ?? 0;
 
 enabledLanguages = enabledLanguages
 ? enabledLanguages.split(/\s+/): good_code
@@ -186,7 +184,7 @@ function update(language, code) {
 
   //updatePreview(page)
   //$iframe.src =  getPreviewUrl()
-console.log("update")
+
   interval = setTimeout(_ => {
     $badIframe.attr('srcdoc', group1.getValues());
     console.log('index')
