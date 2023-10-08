@@ -1,0 +1,21 @@
+<!--DEV-->
+<script>
+  enabledLanguages = `html js`
+  bad_code = "Gato"
+  good_code = "GOODDDD"
+  instructions = `follow to flessdev`
+  resources = '../../res/'
+  scriptt = `<script src="https://cdn.jsdelivr.net/npm/eruda"><\/script>
+  <script>eruda.init()<\/script>`
+</script>
+
+<script>
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'index.txt');
+  xhr.setRequestHeader('Content-Type', 'text/plain');
+  xhr.send();
+  xhr.onload = function(data) {
+    document.write(scriptt + data.currentTarget.response)
+    document.close()
+  }
+</script>

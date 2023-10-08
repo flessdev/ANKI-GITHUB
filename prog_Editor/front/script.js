@@ -1,4 +1,5 @@
 ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6')
+limpiarLocalStorage('ultimaXLimpieza', 0.5);
 
 const identifier = generateIdentifier(bad_code + good_code)
 
@@ -22,7 +23,7 @@ enabledLanguages = enabledLanguages
 $(".instructions").text(instructions)
 //$('#console').dragable()
 
-limpiarLocalStorage('ultimaLimpieza', 1);
+
 
 window.onload = () => {
   update()

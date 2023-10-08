@@ -1,0 +1,26 @@
+<!--ANKI-->
+<template id="bad_code"><textarea>{{Código}}</textarea></template>
+<template id="good_code"><textarea>{{Reverso}}</textarea></template>
+<script>
+  enabledLanguages = `{{enabledLanguages}}`
+
+  bad_code = $('#bad_code').get(0).content.children[0].textContent;
+
+  good_code = $('#good_code').get(0).content.children[0].value;
+
+  instructions = `{{Instruction}}`
+  url = window.location.href.replace(/\/[^/]*$/, '/')
+  resources = `${url}anki_Github/res/`
+  base = `<base href="https://appassets.androidplatform.net/anki_Github/prog_Editor/front/"/>`
+</script>
+
+<script>
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://appassets.androidplatform.net/anki_Github/prog_Editor/front/index.txt');
+  xhr.setRequestHeader('Content-Type', 'text/plain');
+  xhr.send();
+  xhr.onload = function(data) {
+    document.write(base + data.currentTarget.response)
+    document.close()
+  }
+</script>

@@ -206,7 +206,8 @@ function limpiarLocalStorage(claveUltimaLimpieza, tiempoLimpiezaEnDias) {
 
   // Verificamos si no existe registro de la última limpieza
   // o si ha pasado más de tiempoLimpiezaEnMilisegundos desde la última limpieza
-  if (!ultimaLimpieza || (now - parseInt(ultimaLimpieza)) >= tiempoLimpiezaEnMilisegundos) {
+  if (ultimaLimpieza == undefined) {
+    if ( (now - parseInt(ultimaLimpieza)) < tiempoLimpiezaEnMilisegundos) return;
     // Realizamos la limpieza de datos
     for (let i = 0; i < localStorage.length; i++) {
       const clave = localStorage.key(i);
