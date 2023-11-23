@@ -1,8 +1,8 @@
 const keyboard = (function() {
-  let isOpen = false;
-
+  let _isOpen = false;
+  
   function handleResize() {
-    isOpen = window.innerHeight < 450;
+    _isOpen = window.innerHeight < 450;
   }
 
   // Inicializa la librería
@@ -11,8 +11,11 @@ const keyboard = (function() {
   }
 
   return {
+    get isOpen(){
+      return _isOpen
+    },
     init,
-    isOpen: () => isOpen
+    //isOpen: () => isOpen
   };
 })()
 

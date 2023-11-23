@@ -1,4 +1,4 @@
-const identifier = generateIdentifier(bad_code + good_code)
+const identifier = cardId;
 
   
 let retrievedData;
@@ -8,25 +8,19 @@ try{
   console.error(`retrievedData no es objeto: ${e}`)
 }
 const badCodeObj = retrievedData?.code ?? separateCode(bad_code)
+const goodCodeObj = separateCode(good_code) 
 
 let index = retrievedData?.index ?? 0;
 
-    
-  const goodCodeObj = separateCode(good_code)
-  
-  
-  /*window.onload = _=> {
-  update()
-  $goodIframe.attr('srcdoc', good_code);
-  }*/
-  enabledLanguages = (enabledLanguages != "")
-  ? enabledLanguages.split(/\s+/): sortByLength(good_code)//["html", "css", "js"];
+enabledLanguages = enabledLanguages ? enabledLanguages.split(/\s+/)
+: good_code ? goodCodeObj.sortByLength()
+: bad_code ? badCodeObj.sortByLength() : ["html", "css", "js"];
 
 
   $youIframe = $('iframe').eq(0)
   $goodIframe = $('iframe').eq(1)
 
-  $(".instructions").text(instructions)
+  $(".instructions").html(`${instructions} \n<expl>${explanation}</expl>`)
   /* $good = $('.good')
   $you = $('.you')
   $changeBtn = $('.change');
@@ -86,8 +80,8 @@ let index = retrievedData?.index ?? 0;
     }
   }
 
-  const group1 = new createGroup($('.front .editor').get(1), goodCodeObj, $goodIframe);
-  const group2 = new createGroup($('.front .editor').get(0), badCodeObj, $youIframe);
+  const group1 = new createGroup($('.good.editor').get(0), goodCodeObj, $goodIframe);
+  const group2 = new createGroup($('.you.editor').get(0), badCodeObj, $youIframe);
 
   function changer() {
     index = (index + 1) % enabledLanguages.length

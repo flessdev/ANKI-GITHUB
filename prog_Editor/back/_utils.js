@@ -11,6 +11,7 @@ function copyToClipboard(text) {
 function beauty(code) {
   return code?.trim() ?? ''
 }
+
 Object.defineProperty(Object.prototype, 'map', {
   value: function (callback) {
     const result = {};
@@ -32,20 +33,24 @@ function separateCode(code) {
     "")?.join("\n");
 
   return {
-    html, css, js
+    html,
+    css,
+    js
   }.map(beauty)
 }
 
-function sortByLength(code) {
-  const CODE = separateCode(code);
-  const keysWithContent = Object.keys(CODE).filter(key => CODE[key].length > 0);
-  keysWithContent.sort((a, b) => CODE[b].length - CODE[a].length);
+Object.defineProperty(Object.prototype, 'sortByLength', {
+  value: function() {
+    const CODE = this
+    const keysWithContent = Object.keys(CODE).filter(key => CODE[key].trim().length > 0);
+    if (keysWithContent.length == 0) return undefined
+    keysWithContent.sort((a, b) => CODE[b].length - CODE[a].length);
 
-  return keysWithContent;
+    return keysWithContent;
+  }
+})
 
-}
-
-/*function addSwipeListener(options) {
+  /*function addSwipeListener(options) {
     const { distance = 100, callback } = options;
     let startX = 0;
     function handleTouchStart(event) {
@@ -63,173 +68,202 @@ function sortByLength(code) {
     document.documentElement.addEventListener('touchend', handleTouchEnd);
   }*/
 
-function addSwipeListener(options) {
-  const {
-    distance = 80, minSpeed = 0.5, callback
-  } = options;
-  let startX = 0;
-  let startTime = 0;
+  function addSwipeListener(options) {
+    const {
+      distance = 80,
+      minSpeed = 0.5,
+      callback
+    } = options;
+    let startX = 0;
+    let startTime = 0;
 
-  function handleTouchStart(event) {
-    startX = event.touches[0].clientX;
-    startTime = Date.now();
-  }
-
-  function handleTouchEnd(event) {
-    const endX = event.changedTouches[0].clientX;
-    const swipeDistance = endX - startX;
-    const endTime = Date.now();
-
-    const timeDiff = endTime - startTime;
-
-    // Calcula la velocidad en píxeles por milisegundo
-    const swipeSpeed = Math.abs(swipeDistance) / timeDiff;
-
-    if (Math.abs(swipeDistance) >= distance && swipeSpeed >= minSpeed) {
-      const swipeDirection = (swipeDistance > 0) ? 'left': 'right';
-      callback(swipeDirection);
+    function handleTouchStart(event) {
+      startX = event.touches[0].clientX;
+      startTime = Date.now();
     }
-  }
 
-  document.documentElement.addEventListener('touchstart', handleTouchStart);
-  document.documentElement.addEventListener('touchend', handleTouchEnd);
-}
+    function handleTouchEnd(event) {
+      const endX = event.changedTouches[0].clientX;
+      const swipeDistance = endX - startX;
+      const endTime = Date.now();
 
-// Uso de la función con un umbral de velocidad mínimo
+      const timeDiff = endTime - startTime;
 
+      // Calcula la velocidad en píxeles por milisegundo
+      const swipeSpeed = Math.abs(swipeDistance) / timeDiff;
 
-function obtenerIndiceStringMasLargo(strings) {
-  let indiceMasLargo = 0;
-  let longitudMasLarga = 0;
-
-  for (let i = 0; i < strings.length; i++) {
-    if (strings[i].length > longitudMasLarga) {
-      longitudMasLarga = strings[i].length;
-      indiceMasLargo = i;
+      if (Math.abs(swipeDistance) >= distance && swipeSpeed >= minSpeed) {
+        const swipeDirection = (swipeDistance > 0) ? 'left': 'right';
+        callback(swipeDirection);
+      }
     }
+
+    document.documentElement.addEventListener('touchstart', handleTouchStart);
+    document.documentElement.addEventListener('touchend', handleTouchEnd);
   }
 
-  return indiceMasLargo;
-}
+  // Uso de la función con un umbral de velocidad mínimo
 
 
-const createHtml = ({
-  css, html, js
-}) => {
-  return `<!DOCTYPE html>
-  <html lang="en">
-  <head>
-  <base href="${resources}" target="_self"/>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style id="preview-style">
-  ${css}
-  </style>
-  <script>
-  function logToConsole(message){
-  setTimeout(_=> window.parent.postMessage(message, "*") , 500)
+  function obtenerIndiceStringMasLargo(strings) {
+    let indiceMasLargo = 0;
+    let longitudMasLarga = 0;
 
-  }
-  for (const key of Object.keys(console)) {
-  window.console[key] = function(...args) {
-  const logArgs = args.map(arg => typeof arg === "object" ? JSON.stringify(arg) : arg);
-  logToConsole(key + ": " + logArgs.join(" "));
-  };
-  }
-  </script>
-  </head>
-  <body>
-  ${html}
-  <script>
-  ${js}
-  </script>
-  </body>
-  </html>`
-}
+    for (let i = 0; i < strings.length; i++) {
+      if (strings[i].length > longitudMasLarga) {
+        longitudMasLarga = strings[i].length;
+        indiceMasLargo = i;
+      }
+    }
 
-
-let previewUrl = null;
-
-function getPreviewUrl() {
-  return previewUrl
-}
-
-function updatePreview( {
-  html, css, js
-}) {
-  if (previewUrl) {
-    URL.revokeObjectURL(previewUrl)
+    return indiceMasLargo;
   }
 
-  const htmlForPreview = createHtml({
+
+  const createHtml = ({
+    css, html, js
+  }) => {
+    return `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style id="preview-style">
+    ${css}
+    </style>
+    <script>
+    function logToConsole(message){
+    setTimeout(_=> window.parent.postMessage(message, "*") , 500)
+
+    }
+    for (const key of Object.keys(console)) {
+    window.console[key] = function(...args) {
+    const logArgs = args.map(arg => typeof arg === "object" ? JSON.stringify(arg) : arg);
+    logToConsole(key + ": " + logArgs.join(" "));
+    };
+    }
+    </script>
+    </head>
+    <body>
+    ${html}
+    <script>
+    ${js}
+    </script>
+    </body>
+    </html>`
+  }
+
+
+
+
+
+  let previewUrl = null;
+
+  function getPreviewUrl() {
+    return previewUrl
+  }
+
+  function updatePreview( {
     html, css, js
-  })
+  }) {
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl)
+    }
 
-  const blob = new window.Blob([htmlForPreview], {
-    type: 'text/html'
-  })
+    const htmlForPreview = createHtml({
+      html, css, js
+    })
 
-  previewUrl = URL.createObjectURL(blob)
+    const blob = new window.Blob([htmlForPreview], {
+      type: 'text/html'
+    })
 
-  /* if (previewWindowRef?.deref()) {
+    previewUrl = URL.createObjectURL(blob)
+
+    /* if (previewWindowRef?.deref()) {
      previewWindowRef.deref().location = previewUrl
    }*/
-}
-
-function generateIdentifier(inputString) {
-  const hash = inputString.hashCode(); // Usamos la función hashCode() como ejemplo
-  const identifier = String(hash)//.slice(0, 4); // Tomamos los primeros 3 dígitos del hash
-
-  return identifier;
-}
-
-String.prototype.hashCode = function () {
-  let hash = 0;
-  if (this.length === 0) return hash;
-
-  for (let i = 0; i < this.length; i++) {
-    const char = this.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash &= hash; // Convierte a un valor entero de 32 bits
   }
 
-  return hash;
-};
+  function generateIdentifier(inputString) {
+    const hash = inputString.hashCode(); // Usamos la función hashCode() como ejemplo
+    const identifier = String(hash)//.slice(0, 4); // Tomamos los primeros 3 dígitos del hash
 
+    return identifier;
+  }
 
-function limpiarLocalStorage(claveUltimaLimpieza, tiempoLimpiezaEnDias) {
-  const now = new Date().getTime();
-  const tiempoLimpiezaEnMilisegundos = tiempoLimpiezaEnDias * 24 * 60 * 60 * 1000; // Convertir días a milisegundos
+  String.prototype.hashCode = function () {
+    let hash = 0;
+    if (this.length === 0) return hash;
 
-  // Obtenemos la fecha de la última limpieza (si existe)
-  const ultimaLimpieza = localStorage.getItem(claveUltimaLimpieza);
-
-  // Verificamos si no existe registro de la última limpieza
-  // o si ha pasado más de tiempoLimpiezaEnMilisegundos desde la última limpieza
-  if (!ultimaLimpieza || (now - parseInt(ultimaLimpieza)) >= tiempoLimpiezaEnMilisegundos) {
-    // Realizamos la limpieza de datos
-    for (let i = 0; i < localStorage.length; i++) {
-      const clave = localStorage.key(i);
-      let datos;
-      try{
-        datos = JSON.parse(localStorage.getItem(clave));
-      }
-      catch(error){
-        console.log(`Hubo un error al acceder a la clave ${clave}: ${error}`)
-        continue
-      }
-      
-//console.log(datos)
-      if (datos?.now && (now - datos.now) >= tiempoLimpiezaEnMilisegundos) {
-        console.log('remove')
-        // Los datos son más antiguos de tiempoLimpiezaEnMilisegundos, así que los eliminamos
-        localStorage.removeItem(clave);
-      }
-      console.log("dndjdb")
+    for (let i = 0; i < this.length; i++) {
+      const char = this.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash &= hash; // Convierte a un valor entero de 32 bits
     }
 
-    // Guardamos la nueva fecha de la última limpieza
-    localStorage.setItem(claveUltimaLimpieza, now.toString());
-  }
-}
+    return hash;
+  };
 
+
+  function limpiarLocalStorage(claveUltimaLimpieza, tiempoLimpiezaEnDias) {
+    const now = new Date().getTime();
+    const tiempoLimpiezaEnMilisegundos = tiempoLimpiezaEnDias * 24 * 60 * 60 * 1000; // Convertir días a milisegundos
+
+    // Obtenemos la fecha de la última limpieza (si existe)
+    const ultimaLimpieza = localStorage.getItem(claveUltimaLimpieza);
+    //resta = now - +ultimaLimpieza //> tiempoLimpiezaEnMilisegundos
+    //prompt(resta);
+    //prompt(tiempoLimpiezaEnMilisegundos.toString());
+    // Verificamos si no existe registro de la última limpieza
+    // o si ha pasado más de tiempoLimpiezaEnMilisegundos desde la última limpieza
+    if (ultimaLimpieza == undefined ||
+      (now - +ultimaLimpieza) > tiempoLimpiezaEnMilisegundos) {
+      // Realizamos la limpieza de datos
+      for (let i = 0; i < localStorage.length; i++) {
+        //prompt("FOR")
+        const clave = localStorage.key(i);
+        let datos;
+        try {
+          datos = JSON.parse(localStorage.getItem(clave));
+        }
+        catch(error) {
+          console.log(`Hubo un error al acceder a la clave ${clave}: ${error}`)
+          continue
+        }
+
+        console.log(datos)
+        if (datos?.now && (now - +datos.now) >= tiempoLimpiezaEnMilisegundos) {
+          console.log('remove')
+          // Los datos son más antiguos de tiempoLimpiezaEnMilisegundos, así que los eliminamos
+          localStorage.removeItem(clave);
+        }
+        console.log("dndjdb")
+      }
+
+      // Guardamos la nueva fecha de la última limpieza
+      //localStorage.setItem(claveUltimaLimpieza, now.toString());
+    }
+  }
+
+
+  function clearStorage(lastClean, days) {
+    const now = new Date().getTime();
+    const ultimaLimpieza = localStorage.getItem(lastClean);
+
+    if (ultimaLimpieza) {
+      const tiempoTranscurrido = now - parseInt(ultimaLimpieza);
+      const diasTranscurridos = tiempoTranscurrido / (1000 * 60 * 60 * 24);
+
+      if (diasTranscurridos >= days) {
+        localStorage.clear(); // Elimina todos los datos de localStorage
+        localStorage.setItem(lastClean, now.toString()); // Guarda la última limpieza
+        console.log(`Se eliminaron los datos de localStorage después de ${days} días.`);
+      } else {
+        console.log(`No han pasado ${days} días desde la última limpieza.`);
+      }
+    } else {
+      localStorage.setItem(lastClean, now.toString()); // Si no hay registro de la última limpieza, establece uno nuevo
+    }
+  }

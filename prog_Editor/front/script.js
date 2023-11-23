@@ -1,28 +1,30 @@
 ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6')
+clearStorage('lastClean', 0.4)
 
-const identifier = generateIdentifier(bad_code + good_code)
+
+
+const identifier = cardId;
 
 let retrievedData;
-try{
+try {
   retrievedData = JSON.parse(localStorage.getItem(identifier));
-}catch(e){
+}catch(e) {
   console.error(`retrievedData no es objeto: ${e}`)
 }
 const badCodeObj = retrievedData?.code ?? separateCode(bad_code)
+const goodCodeObj = separateCode(good_code) 
 
 let index = retrievedData?.index ?? 0;
 
-enabledLanguages = enabledLanguages
-? enabledLanguages.split(/\s+/): good_code
-? sortByLength(good_code): ["html",
-  "css",
-  "js"];
+enabledLanguages = enabledLanguages ? enabledLanguages.split(/\s+/)
+: good_code ? goodCodeObj.sortByLength()
+: bad_code ? badCodeObj.sortByLength() : ["html", "css", "js"];
 
 
-$(".instructions").text(instructions)
+
+$(".instructions").html(instructions.trim())
+
 //$('#console').dragable()
-
-limpiarLocalStorage('ultimaLimpieza', 1);
 
 window.onload = () => {
   update()
@@ -41,10 +43,10 @@ console.log('test1')
 
 
 $saveBtn.click(_ => {
-  let a = group1['html']?.getValue().trim();
-  let b = group1['css']?.getValue().trim();
-  let c = group1['js']?.getValue().trim();
-
+  let a = group1['html']?.getValue()?.trim() ?? badCodeObj.html;
+  let b = group1['css']?.getValue()?.trim() ?? badCodeObj.css;
+  let c = group1['js']?.getValue()?.trim() ?? badCodeObj.js;
+  
   a = a ? a: false;
   b = b ? `<style>\n${b}\n<\/style>`: false;
   c = c ? `<script>\n${c}\n<\/script>`: false;
@@ -66,12 +68,15 @@ class createGroup {
     this.CODE = codeObj//separateCode(code);
 
     this.editor = ace.edit(selector, {
-      theme: 'ace/theme/monokai',
+      fontFamily: window.getComputedStyle(selector).fontFamily,
+      theme: 'ace/theme/terminal',
+      showGutter: false,
       enableBasicAutocompletion: true,
       enableLiveAutocompletion: true,
       printMargin: false,
       scrollPastEnd: 1,
     })
+  
 
     //LINTER
     //const provider = LanguageProvider.fromCdn("https://www.unpkg.com/ace-linters@latest/build/");
@@ -89,6 +94,7 @@ class createGroup {
       })
       console.log("test3")
     })
+      
 
 
     this.editor.on('change', update);
@@ -126,7 +132,24 @@ function changer(direction) {
 
 $(".front").attr('language', enabledLanguages[index])
 group1.editor.setSession(group1[enabledLanguages[index]])
+group1.editor.renderer.setPadding(20)
 
+function centerSelection() {
+  group1.editor.centerSelection()
+ /* //https://stackoverflow.com/questions/19048964/how-to-center-the-selection-in-ace-editor
+  var cursorTop = group1.editor.renderer.$cursorLayer.getPixelPosition(0).top;
+  //gets distance between cursor and left side of textarea in pixels
+  var scrollerWidth = group1.editor.renderer.$size.scrollerHeight;
+  //gets the width of the text area (that can be seen)
+  group1.editor.renderer.scrollToY(cursorTop - scrollerWidth / 2);
+  //moves the scroller so that the left side i at the same point as the cursor minus half the width of the area that can be seen*/
+}
+group1.editor.on("changeSelection", function(){
+  setTimeout(centerSelection, 0)
+});
+$(window).resize(function(){
+  setTimeout(centerSelection, 0)
+})
 addSwipeListener({
   distance: 70,
   callback: d => changer(d)
@@ -134,18 +157,33 @@ addSwipeListener({
 
 $banner.click(function() {
   //alert(keyboard.isOpen())
-  if (keyboard.isOpen()) group1.editor.focus()
+  if (keyboard.isOpen) group1.editor.focus()
 })
 
 
 
-$(window).resize(_ => {
-  $('.instructions').addClass('compress');
+
+function toggleInstructions(){
+  $('.instructions').toggleClass('hidden');
+  $('.slide').toggleClass('hidden')
+}
+
+$(".instructions").click(toggleInstructions);
+$(".slide").click(toggleInstructions);
+
+$(window).resize(function(){
+  $('.instructions').addClass('hidden');
+  $('.slide').removeClass('hidden')
+  
+  //Esta condición soluciona el problema que ocurría al hacer click en el iframe ya que se enfocaba el editor ace abriendo el teclado inespearadamente
+  if(!keyboard.isOpen){
+    group1.editor.blur()
+  }
 });
 
 
-$('.instructions').click(function() {
-  $(this).toggleClass('compress')
+$("#buttons").click(function(e){
+  //e.stopPropagation()
 })
 
 $('.mostrar').on('touchstart',
@@ -156,10 +194,16 @@ $('.mostrar').on('touchstart',
 
 
 
-
+function updateIframe(iframe, srcdoc){
+  $base.href = window.location.href;
+  iframe.attr('srcdoc', srcdoc);
+  iframe.on('load', function() {
+    $base.href = insideDir;
+  })
+}
 
 $('.update').click(_ => {
-  $goodIframe.attr('srcdoc', good_code);
+  updateIframe($goodIframe, good_code)   
   update()
 })
 
@@ -168,7 +212,9 @@ document.addEventListener('DOMContentLoaded',
 
     window.addEventListener("message", function(event) {
       if (event.source === $badIframe.get(0).contentWindow) {
-        $("#console")[0].textContent += event.data + '\n';
+        $console = $("#console")[0];
+        $console.textContent += event.data + '\n';
+        $console.scrollTop = $console.scrollHeight 
       }
     });
 
@@ -176,8 +222,9 @@ document.addEventListener('DOMContentLoaded',
 
 let interval = null;
 const now = new Date().getTime();
+const doc = document.querySelector('.front iframe').contentWindow.document
 
-function update(language, code) {
+function update() {
   if (interval) clearInterval(interval)
   $("#console").text('')
 
@@ -186,21 +233,23 @@ function update(language, code) {
   //$iframe.src =  getPreviewUrl()
 
   interval = setTimeout(_ => {
-    $badIframe.attr('srcdoc', group1.getValues());
-    console.log('index')
-      const value = {
+    updateIframe($badIframe, group1.getValues());
+    //Lo de abajo es para el localStorage👇
+    const value = {
       code: {
-        html: group1.html?.getValue() ?? "",
-        css: group1.css?.getValue() ?? "",
-        js: group1.js?.getValue() ?? ""
+        html: group1.html?.getValue() ?? badCodeObj['html'],
+        css: group1.css?.getValue() ?? badCodeObj['css'],
+        js: group1.js?.getValue() ?? badCodeObj['js']
       },
       now,
       index
-      }
-      
+    }
+
     console.log(index)
 
 
     localStorage.setItem(identifier, JSON.stringify(value))
-  }, 500)
+  }, 250)
 }
+
+//$base.href = lastHref;

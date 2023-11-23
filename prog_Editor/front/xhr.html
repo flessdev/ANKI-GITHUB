@@ -1,0 +1,22 @@
+<!--DEV-->
+<script>
+  enabledLanguages = ``
+  bad_code = "Hello World<style>Gannnnnnjjjto</style><script>Mi mindo es enorme como<\/script>"
+  good_code = ""
+  instructions = `follow to flessdev`
+  resources = '../../res/'
+  contenidoExistente = document.documentElement.innerHTML; 
+  insideDir = window.location.href
+</script>
+
+<script>
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'page.html');
+  xhr.setRequestHeader('Content-Type', 'text/plain');
+  xhr.send();
+  xhr.onload = function(data) {
+    document.write(contenidoExistente)
+    document.write(data.currentTarget.response)
+    document.close()
+  }
+</script>

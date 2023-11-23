@@ -64,6 +64,8 @@
   .instructions {
     word-wrap: break-word;
     white-space: pre-wrap;
+    font-family: inherit;
+    font-size: .8rem;
   }
   button {
     min-width: 1.8rem;
@@ -170,4 +172,8 @@
     word-wrap: break-word;
     white-space: pre-wrap;
     font-size: .8em !important;
+  }
+  
+  expl {
+    color: red;
   }
