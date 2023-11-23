@@ -1,0 +1,21 @@
+<!--DEV-->
+<script src="_jquery.min.js"></script>
+
+<textarea hidden id="correct">
+  <h1>Hello World &amp;
+  <span>Santa</span> Claus</h1></textarea>
+<textarea hidden id="words">Hell
+Claus
+span</textarea>
+
+<script src="_importerWrite.js"></script>
+<script>
+  const correct = $("textarea#correct").val()
+  const words = $("textarea#words").val()
+  const instructions = "follow to flessdev"
+  const language = ""
+  const source = "fuente de los deseos"
+  const dev = true
+  
+  extractHtml("fillInTheBlanks/front/index.html")
+</script>

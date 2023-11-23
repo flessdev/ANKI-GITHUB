@@ -1,0 +1,16 @@
+<textarea id="bad_code" hidden>{{Código}}</textarea>
+<textarea id="good_code" hidden>{{Reverso}}</textarea>
+
+<script src="_jquery.min.js"></script>
+
+<script>
+  let enabledLanguages = ``
+  let bad_code = $('#bad_code').val()
+  let good_code = $('#good_code').val()
+  let instructions = `{{Instruction}}`
+</script>
+<script src="_importerWrite.js"></script>
+<script>
+ extractHtml("prog_Editor/front/page.html", true)
+</script>
+

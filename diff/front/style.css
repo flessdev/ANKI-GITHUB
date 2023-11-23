@@ -1,0 +1,107 @@
+*{
+  box-sizing: border-box;
+}
+body{
+  margin: 0;
+    font-size: 15px;
+    font-family: sans-serif;
+    margin: 0;
+    color: white;
+    overflow: hidden;
+}
+#containerX{
+  position: absolute;
+  
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+  height: 100vh;
+  width: 100vw;
+}
+
+
+del{
+  color: red;
+  
+}
+ins{
+  color: green;
+}
+#instructions{
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+pre{
+  height: 100%;
+  width: 100%;
+  overflow: scroll;
+  margin: 0;
+}
+
+#code{
+  background: #000;
+  box-sizing: border-box;
+  font-size: 13px !important;
+  border: none;
+}
+
+#code input{
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0;
+  margin: 0;
+  background: #333;
+  border-radius: 3px;
+  color: white;
+  border: none;
+  outline: none
+}
+#btnContainer{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 10px;
+}
+button{
+  background-color: black;
+  color: white;
+}
+
+.accert{
+  color: lime !important;
+}
+
+
+#iframe{
+  outline: 1px solid red;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  position: absolute;
+  z-index: 10;
+  width: 165px;
+  height: 100px;
+  bottom: 0%;
+  right: 0%;
+}
+
+:root{
+   --zoom: 0.5
+  }
+  #wrap {
+    outline: 1px solid green;
+    height: 98%;
+    width: 100%;
+    overflow: hidden !important;
+  }
+  #frame {
+   background: #999c;
+   border: none;
+   margin: 0;
+   border: 0;
+   display: block;
+   height: calc(100% / var(--zoom));
+   width: calc(100% / var(--zoom));
+   transform: scale(var(--zoom));
+   transform-origin: 0 0;
+  }
+  
+  

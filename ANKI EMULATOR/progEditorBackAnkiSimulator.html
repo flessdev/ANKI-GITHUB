@@ -1,0 +1,21 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width:device-width">
+<!--ANKI-->
+<template id="bad_code"><textarea>{{Código}}</textarea></template>
+<template id="good_code"><textarea>{{Reverso}}</textarea></template>
+<script src="_jquery.min.js"></script>
+<script>
+  enabledLanguages = ``
+
+  bad_code = $('#bad_code').get(0).content.children[0].value;
+
+  good_code = $('#good_code').get(0).content.children[0].value;
+
+  instructions = `{{Instruction}}`
+  
+</script>
+
+<script src="_importer.js"></script>
+<script>
+ extractHtml("prog_Editor/back/page.html")
+</script>

@@ -1,0 +1,40 @@
+@font-face {
+	font-family: Victor;
+	src: url('./_VictorMono-Regular.ttf');
+}
+
+
+.night_mode.accert {
+}
+
+
+
+
+body{
+  font-size: 16px
+}
+
+code {
+  font-family: monospace;
+}
+
+pre {
+  background-color: transparent;
+  color: transparent
+}
+
+input {
+  font-size: inherit;
+  font-family: inherit;
+  margin: 0;
+  padding: 0;
+  border-radius: 3px;
+  color: inherit;
+  outline: none;
+  border: none;
+  background: #222;
+}
+
+.accert {
+  color: lime;
+}

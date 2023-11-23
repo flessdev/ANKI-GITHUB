@@ -1,0 +1,194 @@
+<style>
+ *{
+  /*outline: 1px solid red !important;*/
+  box-sizing: border-box;
+  //user-select: none !important;
+ }
+body {
+  /*display: grid;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  align-content: center*/
+  margin: 0;
+  color: gray;
+  font-family: Arial;
+  font-size: 15px;
+  text-align: center;
+  word-wrap: break-word;
+  --letra: black;
+  --english: orange;
+  --spanish: lime;
+}
+
+.card.night_mode{
+  --letra: white;
+  --english: fuchsia;
+  --spanish: aqua;
+}
+
+.typePrompt {
+  display: none
+}
+
+
+#typeans{
+ display: none
+}
+
+.entrada{
+  resize: none;
+  caret-color: #888;
+  font-weight: bold;
+  color: var(--english);
+  width: 100%;
+  padding: 10px;
+  background: #0000;
+  font-family: Snippet;
+  text-align:center;
+  outline: none;
+  border: none; //2px solid #222;
+  padding: 5px 0px;
+  //position: fixed;
+  //bottom: 20px;
+  //left: 0;
+}
+
+button{
+ font-size: 20px;
+ padding: 5px 10px;
+ background: #333;
+ color: white;
+ margin-top: 30px;
+}
+
+.pre-wrap,
+#pronunciation,
+#explanation,
+#spanish,
+#english {
+  /*white-space: pre-wrap;*/
+  //font-family: monospace;
+}
+
+
+b {
+  color: var(--english)
+}
+
+ #english, textarea{
+ font-size: 25px;
+ font-weight: bold;
+}
+
+#spanish{
+ color: var(--spanish)
+}
+
+#english{
+ color: var(--english)
+}
+
+a.downloadAudio{
+ text-decoration: none;
+ position: fixed;
+ bottom: 10px;
+ right: 10px;
+}
+</style>
+
+<div id="english"></div>
+<div id='spanish'></div>
+<div id="literal"></div>
+<button class='play'>Play</button>
+<button class='slow'>Slow</button>
+
+<div class="pre-wrap explanation"></div>
+<a class="downloadAudio" href="#">Download</a>
+
+<script>
+$ = s => document.querySelector(s);
+ $literal = $('#literal');
+ $english = $('#english');
+ $spanish = $('#spanish');
+ $explanation = $('.explanation');
+ $playBtn = $('.play');
+ $slowBtn = $('.slow');
+ $a = $("a.downloadAudio");
+
+function censure(oracion, probability){
+  let letters = oracion.split("");
+  let probability_num = parseFloat(`0.${probability}`);
+  
+  letters.forEach((x, i) => {
+    if (x !== " " && !x.match(/\p{P}/gu)){
+      letters[i] = Math.random() < probability_num ? x : "*";
+    }
+  });
+  
+  return letters.join("");
+}
+
+$explanation.textContent = explanation
+
+$playBtn
+.addEventListener('click',playAudio);
+
+const [english, spanish] = example.split('\n');
+
+$english.textContent = english
+$spanish.textContent = spanish;
+
+
+function sanitizeFilename(filename) {
+  // Reemplaza cualquier caracter no válido con un guión bajo
+  const sanitized = filename.replace(/[^a-zA-Z0-9-_.]/g, "_");
+  // Elimina los puntos al final del nombre del archivo
+  const cleanSanitized = sanitized.replace(/\.*$/, "");
+  return cleanSanitized;
+}
+
+$a.href = `tasker://secondary?sentence=${english}&filename=${sanitizeFilename(english)}`
+
+
+//$english.innerHTML = english;
+
+
+/*Pronunciación TTS
+ const WORD = encodeURIComponent(english);
+ const URL = `https://code.responsivevoice.org/getvoice.php?t=${WORD}&tl=en-US&key=7ymL04OE`
+ $audio.href = `playsound:${URL}`
+ window.location = $audio*/
+
+/**Pronunciacion TTS Amazon**/
+
+function playAudio(){
+  window.location = `playsound:file:///storage/3EBD-19EE/Videos_Ingles_Anki/${sanitizeFilename(english)}.wav`
+}
+
+playAudio()
+
+$slowBtn.onclick = () => {
+  const audio = new Audio(`file:///storage/3EBD-19EE/Videos_Ingles_Anki/${sanitizeFilename(english)}.wav`)
+  audio.playbackRate = 0.5
+  audio.play();
+  
+}
+
+
+/*Traduccion Literal*/
+
+var apiURL =`https://api.mymemory.translated.net/get?q=${english}&langpair=en-US|es-ES`;
+
+function loadLiteral(){   
+ fetch(apiURL)
+  .then(res => res.json())
+  .then(data => {
+   totext = data
+    .responseData.translatedText;
+   $literal.innerHTML = totext
+ })
+}
+//loadLiteral()
+
+$literal.textContent = localStorage.getItem(cardId)
+</script>
